@@ -1,4 +1,5 @@
 import sqlite3
+import logging
 
 DB_NAME = "data.db"
 
@@ -25,9 +26,16 @@ def insert_name(name):
 
 def get_all_names():
     """Retrieve all names from the database."""
+    logging.info("Fetching all users from database")
     connection = sqlite3.connect(DB_NAME)
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM users")
-    rows = cursor.fetchall()
-    connection.close()
-    return rows
+    try:
+        cursor.execute("SELECT * FROM users")
+        rows = cursor.fetchall()
+        logging.info(f"Retrieved {len(rows)} users from database")
+        return rows
+    except Exception as e:
+        logging.error(f"Error fetching users: {str(e)}")
+        raise
+    finally:
+        connection.close()

@@ -1,5 +1,12 @@
 from flask import Flask, render_template, request, jsonify
 from database import init_db, insert_name, get_all_names
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -10,7 +17,8 @@ def home():
 def process():
     data = request.json
     name = data.get("name")
-    if name:
+    if name: 
+        insert_name(name)
         return jsonify({"message": f":) Hello, {name}!"})
     return jsonify({"error": "No name provided"}), 400
 
@@ -21,4 +29,5 @@ def get_names():
     return jsonify({"names": names})
 
 if __name__ == "__main__":
+    init_db()
     app.run(debug=True)
