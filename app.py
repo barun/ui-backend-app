@@ -9,6 +9,8 @@ logging.basicConfig(
 
 app = Flask(__name__)
 
+init_db()
+
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -29,5 +31,5 @@ def get_names():
     return jsonify({"names": names})
 
 if __name__ == "__main__":
-    init_db()
+
     app.run(debug=True)
