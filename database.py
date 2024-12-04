@@ -13,6 +13,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
             name TEXT NOT NULL
+                   )
     """)
     connection.commit()
     connection.close()
