@@ -11,7 +11,7 @@ def process():
     data = request.json
     name = data.get("name")
     if name:
-        return jsonify({"message": f"Hello, {name}!"})
+        return jsonify({"message": f":) Hello, {name}!"})
     return jsonify({"error": "No name provided"}), 400
 
 if __name__ == "__main__":
