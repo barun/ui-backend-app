@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample UI App</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sample UI App</h1>
+        <p>Enter your name below:</p>
+        <input type="text" id="nameInput" placeholder="Your name" />
+        <button id="submitButton">Submit</button>
+        <p id="responseMessage"></p>
+    </div>
+
+    <script>
+        document.getElementById("submitButton").addEventListener("click", async () => {
+            const name = document.getElementById("nameInput").value;
+            const responseMessage = document.getElementById("responseMessage");
+
+            try {
+                const response = await fetch("/process", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ name }),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    responseMessage.textContent = data.message;
+                    responseMessage.style.color = "green";
+                } else {
+                    responseMessage.textContent = data.error;
+                    responseMessage.style.color = "red";
+                }
+            } catch (error) {
+                responseMessage.textContent = "An error occurred!";
+                responseMessage.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>
