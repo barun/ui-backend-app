@@ -25,6 +25,9 @@ def insert_name(name):
     logging.info(f"inserting user {name} into database")
     cursor.execute("INSERT INTO users (name) VALUES (?)", (name))
     connection.commit()
+    cursor.execute("SELECT * FROM users")
+    rows = cursor.fetchall()
+    logging.info(f"Retrieved after insert {len(rows)} users from database")
     connection.close()
 
 def get_all_names():
