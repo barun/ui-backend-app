@@ -12,7 +12,9 @@
         <p>Enter your name below:</p>
         <input type="text" id="nameInput" placeholder="Your name" />
         <button id="submitButton">Submit</button>
+        <button id="fetchButton">Fetch All Names</button>
         <p id="responseMessage"></p>
+        <ul id="nameList"></ul>
     </div>
 
     <script>
@@ -40,6 +42,26 @@
             } catch (error) {
                 responseMessage.textContent = "An error occurred!";
                 responseMessage.style.color = "red";
+            }
+        });
+
+        document.getElementById("fetchButton").addEventListener("click", async () => {
+            const nameList = document.getElementById("nameList");
+            nameList.innerHTML = "";
+
+            try {
+                const response = await fetch("/names");
+                const data = await response.json();
+
+                if (response.ok) {
+                    data.names.forEach(([id, name]) => {
+                        const li = document.createElement("li");
+                        li.textContent = `${id}: ${name}`;
+                        nameList.appendChild(li);
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching names:", error);
             }
         });
     </script>
