@@ -22,7 +22,8 @@ def insert_name(name):
     """Insert a name into the database."""
     connection = psycopg2.connect(DATABASE_URL, sslmode="require")
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO users (name) VALUES (?)", (name,))
+    logging.info(f"inserting user {name} into database")
+    cursor.execute("INSERT INTO users (name) VALUES (?)", (name))
     connection.commit()
     connection.close()
 
