@@ -12,9 +12,8 @@ def init_db():
     cursor = connection.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             name TEXT NOT NULL
-        )
     """)
     connection.commit()
     connection.close()
