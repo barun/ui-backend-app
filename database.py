@@ -1,7 +1,7 @@
 import logging
 import os
 import psycopg2
-
+import psycopg2.sql as sql
 # Get the DATABASE_URL from Render's environment variables
 DATABASE_URL = os.getenv("DATABASE_URL")
 
@@ -13,6 +13,12 @@ def init_db():
         CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
             name TEXT NOT NULL
+                   )
+    """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS images (
+            id SERIAL PRIMARY KEY,
+            image_data BYTEA NOT NULL
                    )
     """)
     connection.commit()
@@ -45,3 +51,21 @@ def get_all_names():
         raise
     finally:
         connection.close()
+def save_image_to_db(binary_data):
+    """Save an image file to the PostgreSQL database."""
+    try:
+        # Connect to the database
+        conn = psycopg2.connect(DATABASE_URL, sslmode="require")
+        cur = conn.cursor()
+
+        # Insert the binary data into the table
+        query = sql.SQL("INSERT INTO images (image_data) VALUES ( %s)")
+        cur.execute(query, (binary_data))
+        
+        conn.commit()
+        print(f"Image saved to the database successfully!")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        cur.close()
+        conn.close()
